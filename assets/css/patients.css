@@ -1,0 +1,6 @@
+.avatar{width:36px;height:36px;border-radius:50%;font-weight:700}
+.avatar.small{width:28px;height:28px;font-size:.8rem}
+.table-hover tbody tr:hover{background:#f8f9fa}
+@media (max-width:767px){
+  #searchInput{min-width:140px}
+}
