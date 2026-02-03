@@ -59,10 +59,11 @@
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item"><a class="nav-link" href="services.html">Services</a></li>
                         <li class="nav-item"><a class="nav-link" href="patients.html">Patients</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                        <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
                         <li class="nav-item"><a class="nav-link" href="#team">Team</a></li>
-                        <li class="nav-item"><a class="nav-link" href="appointment.html">Appointment</a></li>
+                        
                         <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                        <li class="nav-item"><a class="nav-link" href="dashboard.html">Staff Dashboard</a></li>
                     </ul>
                     <a href="appointment.html" class="btn btn-primary ms-lg-3">Book Appointment</a>
                 </div>
@@ -71,7 +72,7 @@
 
         <!-- Hero -->
         <header class="hero" data-aos="fade-up">
-            <video class="hero-video" autoplay muted loop playsinline controls poster="https://images.unsplash.com/photo-1588774069166-2e52d5e1b4a6?q=80&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&s=2d1a28a8b6f4b5b8f34c">
+            <video class="hero-video" src="assets/video/Untitled design.mp4"autoplay muted loop playsinline controls poster="https://images.unsplash.com/photo-1588774069166-2e52d5e1b4a6?q=80&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&s=2d1a28a8b6f4b5b8f34c">
                 <!-- Preferred remote video (may require a direct MP4 link). Fallback to a known sample below if the first source fails. -->
                 <source src="https://media.istockphoto.com/id/1322193259/video/dental-implant-installing-4k-resolution.mp4?s=mp4-640x640-is&k=20&c=Dj35J-wprbb1-2aNJTFHVViDTuVxEkD2j0xbg5D0kic=" type="video/mp4">
                 <source src="https://media.istockphoto.com/id/1322193259/video/dental-implant-installing-4k-resolution.mp4?s=mp4-640x640-is&k=20&c=Dj35J-wprbb1-2aNJTFHVViDTuVxEkD2j0xbg5D0kic=" type="video/mp4">
@@ -83,21 +84,28 @@
                     <div class="col-lg-7">
                         <h1 class="display-5 fw-bold">Dr. Anoop's Anupam Dental Clinic</h1>
                         <p class="lead mb-4">Gentle care, modern endodontics, and a smile you'll love. Experienced dentists, advanced technology.</p>
-                        <a href="#contact" class="btn btn-lg btn-light me-2">Book Appointment</a>
+                        <a href="appointment.html" class="btn btn-lg btn-light me-2">Book Appointment</a>
                         <a href="#services" class="btn btn-outline-light btn-lg">Our Services</a>
-                    </div>
-                    <div class="col-lg-5 d-none d-lg-block">
-                        <div class="card shadow-lg hero-card">
-                            <img src="https://images.unsplash.com/photo-1588774069166-2e52d5e1b4a6?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=2d1a28a8b6f4b5b8f34c" class="card-img-top rounded-top" alt="dental">
-                            <div class="card-body">
-                                <h5 class="card-title">Friendly care — modern equipment</h5>
-                                <p class="card-text small">We use microsurgical endodontic techniques and digital imaging to provide precise, comfortable treatment.</p>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
         </header>
+
+        <!-- About -->
+        <section id="about" class="py-5 bg-light" data-aos="fade-up">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 mb-4 mb-lg-0">
+                        <img src="assets/images/Out1.jpeg" class="img-fluid rounded shadow" alt="clinic">
+                    </div>
+                    <div class="col-lg-6">
+                        <h3 class="fw-bold">About Dental</h3>
+                        <p class="text-muted">Anupam Dental Clinic, led by Dr. Anoop, has been caring for patients since 19th August 1996. For nearly three decades, we have remained committed to ethical dentistry, clear communication, and compassionate care.</p>
+                        <a href="about.html" class="btn btn-primary mt-3">More</a>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <!-- Services -->
         <section id="services" class="py-5" data-aos="fade-up">
@@ -110,18 +118,18 @@
                     <div class="col-md-4">
                         <div class="card h-100 service-card">
                             <div class="card-body text-center">
-                                <div class="icon bg-primary text-white mb-3">🦷</div>
-                                <h5 class="card-title">Root Canal Therapy</h5>
-                                <p class="card-text text-muted">Pain-relieving, precise root canal treatments using modern microscopes.</p>
+                                <div class="icon bg-primary text-white mb-3">✨</div>
+                                <h5 class="card-title">General Dentistry</h5>
+                                <p class="card-text text-muted">our general dentistry services focus on prevention, accurate diagnosis, and long-term oral health. From routine dental check-ups to essential treatments, every step is guided by clarity and ethical care.</p>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="card h-100 service-card">
                             <div class="card-body text-center">
-                                <div class="icon bg-primary text-white mb-3">✨</div>
-                                <h5 class="card-title">Cosmetic Dentistry</h5>
-                                <p class="card-text text-muted">Veneers, whitening and aesthetic restorations to enhance your smile.</p>
+                                <div class="icon bg-primary text-white mb-3">🦷</div>
+                                <h5 class="card-title">Root Canal Treatments</h5>
+                                <p class="card-text text-muted">Root canal treatments are handled by a dedicated team of experienced Endodontists, ensuring accurate, comfortable, and efficient care.</p>
                             </div>
                         </div>
                     </div>
@@ -129,31 +137,10 @@
                         <div class="card h-100 service-card">
                             <div class="card-body text-center">
                                 <div class="icon bg-primary text-white mb-3">🛡️</div>
-                                <h5 class="card-title">Preventive Care</h5>
-                                <p class="card-text text-muted">Regular checkups, cleanings and patient education to maintain oral health.</p>
+                                <h5 class="card-title">Orthodontics </h5>
+                                <p class="card-text text-muted">we provide orthodontic care for children, adolescents, and adults, including advanced clear aligner treatments for discreet and effective smile correction.</p>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- About -->
-        <section id="about" class="py-5 bg-light" data-aos="fade-up">
-            <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-lg-6 mb-4 mb-lg-0">
-                        <img src="https://images.unsplash.com/photo-1588774069166-2e52d5e1b4a6?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&s=2d1a28a8b6f4b5b8f34c" class="img-fluid rounded shadow" alt="clinic">
-                    </div>
-                    <div class="col-lg-6">
-                        <h3 class="fw-bold">About Anupam Dental</h3>
-                        <p class="text-muted">Dr. Anoop leads a team that blends compassionate patient care with evidence-based techniques. Our clinic offers efficient appointment scheduling and digital diagnostics for predictable outcomes.</p>
-                        <ul class="list-unstyled text-muted">
-                            <li>• Advanced digital X-ray and microscopes</li>
-                            <li>• Comfortable sedation options</li>
-                            <li>• Insurance & flexible payment plans</li>
-                        </ul>
-                        <a href="#contact" class="btn btn-primary mt-3">Contact Us</a>
                     </div>
                 </div>
             </div>
@@ -169,31 +156,81 @@
                 <div class="row g-4">
                     <div class="col-md-4">
                         <div class="card team-card text-center p-3">
-                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400&auto=format&fit=crop&ixlib=rb-4.0.3&s=1b1a" class="rounded-circle mx-auto" width="120" height="120" alt="Dr Anoop">
-                        <div class="card-body">
-                            <h5 class="card-title mb-0">Dr. Anoop</h5>
-                            <small class="text-muted d-block mb-2">Chief Endodontist</small>
-                            <p class="small text-muted">Specializes in micro-endodontics and retreatments.</p>
-                        </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card team-card text-center p-3">
-                            <img src="https://images.unsplash.com/photo-1545996124-6ea4a7c8f6a8?q=80&w=400&auto=format&fit=crop&ixlib=rb-4.0.3&s=2a2b" class="rounded-circle mx-auto" width="120" height="120" alt="Associate">
+                            <img src="assets/images/Dr.%20Anoop.jpg" class="rounded-circle mx-auto" width="120" height="120" alt="Dr Anoop">
                             <div class="card-body">
-                                <h5 class="card-title mb-0">Dr. Priya</h5>
-                                <small class="text-muted d-block mb-2">Restorative Dentist</small>
-                                <p class="small text-muted">Cosmetic and restorative procedures with gentle care.</p>
+                                <h5 class="card-title mb-0">Dr. Anoopkumar R</h5>
+                                <small class="text-muted d-block mb-2">BDS-Chief Dental</small>
+                                <p class="small text-muted">Reg No: 1732</p>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="card team-card text-center p-3">
-                            <img src="https://images.unsplash.com/photo-1554151228-14d9def656e4?q=80&w=400&auto=format&fit=crop&ixlib=rb-4.0.3&s=3c3d" class="rounded-circle mx-auto" width="120" height="120" alt="Hygienist">
+                            <img src="assets/images/Dr.Terry Thomas.jpg" class="rounded-circle mx-auto" width="120" height="120" alt="Associate">
                             <div class="card-body">
-                                <h5 class="card-title mb-0">Ms. Kumar</h5>
-                                <small class="text-muted d-block mb-2">Hygienist</small>
-                                <p class="small text-muted">Focus on preventive care and patient comfort.</p>
+                                <h6 class="card-title mb-0">Dr. Terry Thomas Edathotty</h6>
+                                <small class="text-muted d-block mb-2">MDS-Orthodontist</small>
+                                <p class="small text-muted">Reg No: 4807</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card team-card text-center p-3">
+                            <img src="assets/images/Dr.krishnakumr.jpg" class="rounded-circle mx-auto" width="120" height="120" alt="Hygienist">
+                            <div class="card-body">
+                                <h5 class="card-title mb-0">Dr.KrishnaKumar</h5>
+                                <small class="text-muted -d-block mb-2">MDS-Paedodontist</small>
+                                <p class="small text-muted">Reg No: 7729</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card team-card text-center p-3">
+                            <img src="assets/images/Dr. Renjith.jpg" class="rounded-circle mx-auto" width="120" height="120" alt="Hygienist">
+                            <div class="card-body">
+                                <h5 class="card-title mb-0">Dr.Renjith Raj</h5>
+                                <small class="text-muted -d-block mb-2">MDS-Endodontist</small>
+                                <p class="small text-muted">Reg No: 8171</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card team-card text-center p-3">
+                            <img src="assets/images/Dr.Justin.jpeg" class="rounded-circle mx-auto" width="120" height="120" alt="Hygienist">
+                            <div class="card-body">
+                                <h5 class="card-title mb-0">Dr.Justin Mathew</h5>
+                                <small class="text-muted -d-block mb-2">MDS-Oral &Maxillio Facial Surgeon</small>
+                                <p class="small text-muted">Reg No: 5492</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card team-card text-center p-3">
+                            <img src="assets/images/Dr,Joseph.jpeg" class="rounded-circle mx-auto" width="120" height="120" alt="Hygienist">
+                            <div class="card-body">
+                                <h5 class="card-title mb-0">Dr.Joseph J Pulikkottil</h5>
+                                <small class="text-muted -d-block mb-2">MDS-Periodontist & Implantologist</small>
+                                <p class="small text-muted">Reg No: 2418</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card team-card text-center p-3">
+                            <img src="assets/images/Dr.Sijo P Mathew.jpeg" class="rounded-circle mx-auto" width="120" height="120" alt="Hygienist">
+                            <div class="card-body">
+                                <h5 class="card-title mb-0">Dr.Sijo P Mathew </h5>
+                                <small class="text-muted -d-block mb-2">MDS-Conservative and Endodontist</small>
+                                <p class="small text-muted">Reg No:  8982</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card team-card text-center p-3">
+                            <img src="assets/images/Dr.Shibu Sreedhar.jpeg" class="rounded-circle mx-auto" width="120" height="120" alt="Hygienist">
+                            <div class="card-body">
+                                <h5 class="card-title mb-0">Dr.Shibu Sreedhar</h5>
+                                <small class="text-muted -d-block mb-2">MDS-Endodontist</small>
+                                <p class="small text-muted">Reg No:  1561-A</p>
                             </div>
                         </div>
                     </div>
@@ -209,9 +246,8 @@
                         <h3 class="fw-bold">Get in Touch</h3>
                         <p class="text-white-50">Call or fill the form and our team will get back to you to confirm your appointment.</p>
                         <ul class="list-unstyled">
-                            <li><strong>Phone:</strong> +91 98765 43210</li>
-                            <li><strong>Email:</strong> info@anupamdentalclinic.com</li>
-                            <li><strong>Address:</strong> 123 Dental Street, City</li>
+                            <li><strong>Phone:</strong> +91 9446046868</li>
+                            <li><strong>Email:</strong> anoopkranupam@gmail.com</li>
                         </ul>
                     </div>
                     <div class="col-lg-6">
@@ -240,29 +276,6 @@
             </div>
         </section>
 
-        <!-- Illustrations -->
-        <section class="py-4 bg-white">
-            <div class="container">
-                <h5 class="mb-3">Illustrations</h5>
-                <div class="row g-3 align-items-center illustrations">
-                    <div class="col-6 col-sm-3" data-aos="fade-up" data-aos-delay="50">
-                        <img src="assets/images/tooth-1.svg" class="img-fluid rounded shadow-sm" alt="tooth illustration">
-                    </div>
-                    <div class="col-6 col-sm-3" data-aos="fade-up" data-aos-delay="120">
-                        <img src="assets/images/tooth-2.svg" class="img-fluid rounded shadow-sm" alt="tooth illustration">
-                    </div>
-                    <div class="col-6 col-sm-3 d-flex justify-content-center" data-aos="fade-up" data-aos-delay="190">
-                        <lottie-player src="https://assets7.lottiefiles.com/packages/lf20_2LdLKan1Qx.json"  background="transparent"  speed="1"  style="width:110px; height:110px;"  loop  autoplay></lottie-player>
-                    </div>
-                    <div class="col-6 col-sm-3" data-aos="fade-up" data-aos-delay="260">
-                        <img src="assets/images/tooth-4.svg" class="img-fluid rounded shadow-sm" alt="tooth illustration">
-                    </div>
-                </div>
-            </div>
-        </section>
-
-
-
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
         <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
@@ -271,5 +284,24 @@
         <script src="assets/js/feedback-widget.js"></script>
         <script src="assets/js/scripts.js"></script>
         <script> AOS.init({duration:700, once:true});</script>
+
+        <!-- Team Member Modal -->
+        <div class="modal fade" id="teamModal" tabindex="-1" aria-labelledby="teamModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <img id="modalImage" src="" class="rounded-circle mb-3" width="150" height="150" style="margin: 0 auto;" alt="Team Member">
+                        <h4 id="modalName"></h4>
+                        <p class="text-primary fw-bold" id="modalSpecialty"></p>
+                        <p class="text-muted" id="modalRegNo"></p>
+                        <div id="modalBio" class="mt-3 about-content"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </body>
 </html>

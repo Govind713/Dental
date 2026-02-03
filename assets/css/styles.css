@@ -52,8 +52,7 @@ footer{border-top:1px solid rgba(255,255,255,0.04)}
 .site-footer h5,.site-footer h6{color:#fff}
 .site-footer a{color:rgba(255,255,255,0.9)}
 .site-footer .text-muted{color:rgba(255,255,255,0.7) !important;
-margin-bottom: 1px;
-}
+margin-bottom: 2px;}
 .site-footer .social a{margin-right:8px}
 .illustrations img{max-height:110px}
 
@@ -72,6 +71,135 @@ lottie-player{display:block;max-width:110px;margin:auto}
 /* Video hero small screens: hide for low bandwidth */
 @media (max-width: 576px){
   .hero-video{display:none}
+}
+
+/* Ensure team cards are equal height and content is centered */
+#team .row.g-4 > .col-lg-2,
+#team .row.g-4 > .col-md-4 {
+    display: flex;
+}
+#team .card.team-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 320px;
+    height: 100%;
+    
+}
+#team .card.team-card .card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+}
+
+/* Team card hover effects */
+.team-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    transition: all 0.3s ease;
+}
+.team-card {
+    transition: all 0.3s ease;
+}
+
+/* Responsive adjustments for 6-column layout */
+@media (max-width: 991.98px) {
+    #team .card.team-card .card-body {
+        padding: 1rem 0.5rem;
+    }
+    #team .card.team-card img {
+        width: 80px !important;
+        height: 80px !important;
+    }
+    #team .card.team-card .card-title {
+        font-size: 0.9rem;
+    }
+    #team .card.team-card small {
+        font-size: 0.75rem;
+    }
+}
+
+/* Carousel Styles */
+.gallery-item {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.gallery-item img {
+    width: 100% !important;
+    height: 200px !important;
+    object-fit: cover !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1) !important;
+    transition: transform 0.3s ease;
+}
+
+.gallery-item img:hover {
+    transform: scale(1.05);
+}
+
+.gallery-caption h6 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.gallery-caption small {
+    color: #666;
+    font-size: 0.8rem;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    width: 5%;
+    opacity: 0.8;
+}
+
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+    opacity: 1;
+}
+
+.carousel-indicators {
+    bottom: -40px;
+}
+
+.carousel-indicators button {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin: 0 4px;
+    border: 2px solid #0066cc;
+}
+
+.carousel-indicators .active {
+    background-color: #0066cc;
+}
+
+/* Responsive carousel adjustments */
+@media (max-width: 768px) {
+    .gallery-item img {
+        height: 150px !important;
+    }
+    
+    .gallery-caption h6 {
+        font-size: 0.8rem;
+    }
+    
+    .gallery-caption small {
+        font-size: 0.75rem;
+    }
+    
+    .carousel-indicators {
+        bottom: -30px;
+    }
 }
 
 /* Feedback Widget Styles */
@@ -170,6 +298,13 @@ lottie-player{display:block;max-width:110px;margin:auto}
   visibility:visible;
 }
 
+/* about doctor content */
+
+.about-content{
+  text-align: justify;
+  line-height: 1.6;
+}
+
 /* Responsive feedback button */
 @media (max-width:576px){
   .feedback-floating-btn{
@@ -183,4 +318,47 @@ lottie-player{display:block;max-width:110px;margin:auto}
     max-width:calc(100% - 20px);
     width:90%;
   }
+}
+
+
+.footer-about p{
+  line-height: 0.8 px !important;
+}
+
+/* Global responsive fixes */
+img, svg, picture, video, .card-img-top{max-width:100%;height:auto;display:block}
+
+/* Make hero scale better on medium and small screens */
+@media (max-width: 992px){
+  :root{--hero-height:46vh}
+  .hero-content{padding:2rem 0}
+  .display-5{font-size:1.9rem}
+  .lead{font-size:1rem}
+}
+
+@media (max-width:768px){
+  :root{--hero-height:38vh}
+  .display-5{font-size:1.5rem}
+  .lead{font-size:.98rem}
+  .hero{background-position:top}
+  .hero .overlay{background:linear-gradient(180deg,rgba(0,0,0,0.35),rgba(0,0,0,0.02))}
+  .hero-card{display:none}
+}
+
+/* Team avatar scaling */
+.team-card img{width:100%;max-width:120px;height:auto;margin:0 auto}
+
+/* Ensure cards use flexible layout */
+.service-card .icon{width:64px;height:64px}
+
+/* Illustrations wrap better on small screens */
+@media (max-width:576px){
+  .illustrations .col-6{padding:6px}
+  .illustrations img, lottie-player{max-width:90px}
+}
+
+/* Improve form/card spacing on narrow screens */
+@media (max-width:420px){
+  .container{padding-left:12px;padding-right:12px}
+  .card.p-3{padding:12px}
 }

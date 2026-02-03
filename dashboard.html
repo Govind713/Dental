@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Dashboard - Anupam Dental</title>
+    
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- FullCalendar CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css" rel="stylesheet">
+    
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Inter', sans-serif;
+        }
+        .navbar {
+            background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+        }
+        .navbar-brand {
+            color: white !important;
+            font-weight: 700;
+        }
+        .sidebar {
+            background: white;
+            border-right: 1px solid #e0e0e0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .sidebar .nav-link {
+            color: #333;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            padding: 10px 15px;
+        }
+        .sidebar .nav-link:hover {
+            background-color: #f0f0f0;
+        }
+        .sidebar .nav-link.active {
+            background-color: #0066cc;
+            color: white;
+        }
+        .main-content {
+            padding: 20px;
+        }
+        .card {
+            border: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+        .card-header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+            font-weight: 600;
+            padding: 15px;
+        }
+        .doctor-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 3px;
+            background-color: #0066cc;
+            color: white;
+            font-size: 12px;
+            margin-right: 5px;
+        }
+        .btn-primary {
+            background-color: #0066cc;
+            border-color: #0066cc;
+        }
+        .btn-primary:hover {
+            background-color: #0052a3;
+            border-color: #0052a3;
+        }
+        .event-item {
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #f8f9fa;
+            border-left: 4px solid #0066cc;
+            border-radius: 3px;
+        }
+        .conflict-warning {
+            color: #dc3545;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        #calendar {
+            background: white;
+            border-radius: 5px;
+            padding: 15px;
+        }
+        .fc {
+            font-family: 'Inter', sans-serif;
+        }
+        .fc .fc-button-primary {
+            background-color: #0066cc;
+            border-color: #0066cc;
+        }
+        .fc .fc-button-primary:not(:disabled).fc-button-active {
+            background-color: #0052a3;
+        }
+        .modal-header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .history-item {
+            padding: 12px;
+            border-left: 3px solid #0066cc;
+            margin-bottom: 10px;
+            background-color: #f8f9fa;
+        }
+        .history-date {
+            font-weight: 600;
+            color: #0066cc;
+            margin-bottom: 5px;
+        }
+        .tab-content {
+            padding: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">Anupam Dental</a>
+            <span class="navbar-text text-white ms-auto">Staff Dashboard</span>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 sidebar">
+                <h6 class="text-muted mb-3">Navigation</h6>
+                <nav class="nav flex-column">
+                    <a href="#" class="nav-link active" data-view="calendar">
+                        📅 Calendar
+                    </a>
+                    <a href="#" class="nav-link" data-view="doctors">
+                        👨‍⚕️ Doctors
+                    </a>
+                    <a href="#" class="nav-link" data-view="appointments">
+                        📋 Appointments
+                    </a>
+                    <a href="#" class="nav-link" data-view="history">
+                        📜 Patient History
+                    </a>
+                </nav>
+                <hr>
+                <a href="index.html" class="btn btn-sm btn-outline-primary w-100">Back to Home</a>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 main-content">
+                <!-- Calendar View -->
+                <div id="calendarView" class="view-section">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span>Calendar & Appointments</span>
+                            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#appointmentModal">+ New Appointment</button>
+                        </div>
+                        <div class="card-body">
+                            <div id="calendar"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Doctors View -->
+                <div id="doctorsView" class="view-section" style="display: none;">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span>Doctors Management</span>
+                            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#doctorModal">+ Add Doctor</button>
+                        </div>
+                        <div class="card-body">
+                            <div id="doctorsList"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Appointments View -->
+                <div id="appointmentsView" class="view-section" style="display: none;">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span>All Appointments</span>
+                            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#appointmentModal">+ New Appointment</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Filter by Doctor:</label>
+                                <select id="filterDoctor" class="form-select">
+                                    <option value="">All Doctors</option>
+                                </select>
+                            </div>
+                            <div id="appointmentsList"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- History View -->
+                <div id="historyView" class="view-section" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">
+                            Doctor Patient History
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Select Doctor:</label>
+                                <select id="selectDoctorForHistory" class="form-select">
+                                    <option value="">-- Choose a doctor --</option>
+                                </select>
+                            </div>
+                            <div id="historyList"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Doctor Modal -->
+    <div class="modal fade" id="doctorModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="doctorModalTitle">Add Doctor</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="doctorForm">
+                    <div class="modal-body">
+                        <input type="hidden" id="doctorId">
+                        <div class="mb-3">
+                            <label class="form-label">Name</label>
+                            <input type="text" class="form-control" id="doctorName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Specialization</label>
+                            <input type="text" class="form-control" id="doctorSpecialization" placeholder="e.g., Endodontist">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Contact</label>
+                            <input type="text" class="form-control" id="doctorContact">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">License Number</label>
+                            <input type="text" class="form-control" id="doctorLicense">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Doctor</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Appointment Modal -->
+    <div class="modal fade" id="appointmentModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">New Appointment</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="appointmentForm">
+                    <div class="modal-body">
+                        <input type="hidden" id="appointmentId">
+                        <div class="mb-3">
+                            <label class="form-label">Patient Name</label>
+                            <input type="text" class="form-control" id="appointmentPatientName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Contact (Phone/Email)</label>
+                            <input type="text" class="form-control" id="appointmentContact" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Doctor</label>
+                            <select class="form-select" id="appointmentDoctor" required>
+                                <option value="">-- Select Doctor --</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Service</label>
+                            <input type="text" class="form-control" id="appointmentService" placeholder="e.g., Root Canal" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Price (₹)</label>
+                            <input type="number" class="form-control" id="appointmentPrice" placeholder="0">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Date</label>
+                            <input type="date" class="form-control" id="appointmentDate" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Time</label>
+                            <input type="time" class="form-control" id="appointmentTime" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Notes</label>
+                            <textarea class="form-control" id="appointmentNotes" rows="2"></textarea>
+                        </div>
+                        <div id="conflictWarning" class="conflict-warning" style="display: none;">
+                            ⚠️ Doctor has another appointment at this time!
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Appointment</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- FullCalendar JS -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
+    
+    <script>
+        const API_BASE = '/api';
+        let calendar = null;
+        let allDoctors = [];
+        let allAppointments = [];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadDoctors();
+            initializeCalendar();
+            setupEventListeners();
+        });
+
+        // Setup navigation
+        function setupEventListeners() {
+            document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const view = e.target.closest('.nav-link').dataset.view;
+                    showView(view);
+                    
+                    // Update active nav link
+                    document.querySelectorAll('.sidebar .nav-link').forEach(l => l.classList.remove('active'));
+                    e.target.closest('.nav-link').classList.add('active');
+                });
+            });
+
+            // Doctor form
+            document.getElementById('doctorForm').addEventListener('submit', saveDoctorForm);
+            
+            // Appointment form
+            document.getElementById('appointmentForm').addEventListener('submit', saveAppointmentForm);
+            
+            // Filter doctor for history
+            document.getElementById('selectDoctorForHistory').addEventListener('change', loadDoctorHistory);
+            
+            // Filter appointments by doctor
+            document.getElementById('filterDoctor').addEventListener('change', loadAppointments);
+
+            // Check conflict on time change
+            document.getElementById('appointmentTime').addEventListener('change', checkConflict);
+            document.getElementById('appointmentDate').addEventListener('change', checkConflict);
+            document.getElementById('appointmentDoctor').addEventListener('change', checkConflict);
+        }
+
+        function showView(viewName) {
+            document.querySelectorAll('.view-section').forEach(v => v.style.display = 'none');
+            
+            switch(viewName) {
+                case 'calendar':
+                    document.getElementById('calendarView').style.display = 'block';
+                    if (calendar) calendar.render();
+                    break;
+                case 'doctors':
+                    document.getElementById('doctorsView').style.display = 'block';
+                    renderDoctors();
+                    break;
+                case 'appointments':
+                    document.getElementById('appointmentsView').style.display = 'block';
+                    loadAppointments();
+                    break;
+                case 'history':
+                    document.getElementById('historyView').style.display = 'block';
+                    break;
+            }
+        }
+
+        // Load doctors
+        async function loadDoctors() {
+            try {
+                const res = await fetch(`${API_BASE}/doctors`);
+                const data = await res.json();
+                
+                // Ensure data is an array
+                allDoctors = Array.isArray(data) ? data : [];
+                
+                console.log('Loaded doctors:', allDoctors);
+                
+                // Update dropdowns
+                const docSelect = document.getElementById('appointmentDoctor');
+                const docSelectHistory = document.getElementById('selectDoctorForHistory');
+                docSelect.innerHTML = '<option value="">-- Select Doctor --</option>';
+                docSelectHistory.innerHTML = '<option value="">-- Choose a doctor --</option>';
+                
+                if (Array.isArray(allDoctors) && allDoctors.length > 0) {
+                    allDoctors.forEach(doc => {
+                        const opt1 = document.createElement('option');
+                        opt1.value = doc.id;
+                        opt1.textContent = `${doc.name}${doc.specialization ? ' (' + doc.specialization + ')' : ''}`;
+                        docSelect.appendChild(opt1);
+                        
+                        const opt2 = document.createElement('option');
+                        opt2.value = doc.id;
+                        opt2.textContent = `${doc.name}${doc.specialization ? ' (' + doc.specialization + ')' : ''}`;
+                        docSelectHistory.appendChild(opt2);
+                    });
+                }
+                
+                renderDoctors();
+            } catch (err) {
+                console.error('Load doctors error', err);
+                allDoctors = [];
+            }
+        }
+
+        // Render doctors list
+        function renderDoctors() {
+            const list = document.getElementById('doctorsList');
+            if (!allDoctors.length) {
+                list.innerHTML = '<p class="text-muted">No doctors added yet.</p>';
+                return;
+            }
+            
+            list.innerHTML = allDoctors.map(doc => `
+                <div class="event-item">
+                    <div class="fw-bold">${doc.name}</div>
+                    <small class="text-muted">
+                        ${doc.specialization || 'Dentist'} • ${doc.contact || 'N/A'}
+                    </small>
+                    <div class="mt-2">
+                        <button class="btn btn-sm btn-outline-secondary" onclick="editDoctor(${doc.id})">Edit</button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteDoctor(${doc.id})">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Edit doctor
+        function editDoctor(id) {
+            const doc = allDoctors.find(d => d.id === id);
+            if (!doc) return;
+            
+            document.getElementById('doctorId').value = id;
+            document.getElementById('doctorName').value = doc.name;
+            document.getElementById('doctorSpecialization').value = doc.specialization || '';
+            document.getElementById('doctorContact').value = doc.contact || '';
+            document.getElementById('doctorLicense').value = doc.license || '';
+            document.getElementById('doctorModalTitle').textContent = 'Edit Doctor';
+            
+            new bootstrap.Modal(document.getElementById('doctorModal')).show();
+        }
+
+        // Delete doctor
+        async function deleteDoctor(id) {
+            if (!confirm('Delete this doctor?')) return;
+            
+            try {
+                const res = await fetch(`${API_BASE}/doctors/${id}`, { method: 'DELETE' });
+                if (res.ok) {
+                    loadDoctors();
+                } else {
+                    alert('Failed to delete doctor');
+                }
+            } catch (err) {
+                console.error('Delete error', err);
+                alert('Error deleting doctor');
+            }
+        }
+
+        // Save doctor form
+        async function saveDoctorForm(e) {
+            e.preventDefault();
+            
+            const id = document.getElementById('doctorId').value;
+            const name = document.getElementById('doctorName').value.trim();
+            const specialization = document.getElementById('doctorSpecialization').value.trim();
+            const contact = document.getElementById('doctorContact').value.trim();
+            const license = document.getElementById('doctorLicense').value.trim();
+            
+            if (!name) {
+                alert('Please enter doctor name');
+                return;
+            }
+            
+            try {
+                const method = id ? 'PUT' : 'POST';
+                const url = id ? `${API_BASE}/doctors/${id}` : `${API_BASE}/doctors`;
+                
+                const res = await fetch(url, {
+                    method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, specialization, contact, license })
+                });
+                
+                if (res.ok) {
+                    loadDoctors();
+                    document.getElementById('doctorForm').reset();
+                    document.getElementById('doctorId').value = '';
+                    document.getElementById('doctorModalTitle').textContent = 'Add Doctor';
+                    bootstrap.Modal.getInstance(document.getElementById('doctorModal')).hide();
+                } else {
+                    alert('Failed to save doctor');
+                }
+            } catch (err) {
+                console.error('Save error', err);
+                alert('Error saving doctor');
+            }
+        }
+
+        // Initialize calendar
+        function initializeCalendar() {
+            const calendarEl = document.getElementById('calendar');
+            calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                events: fetchCalendarEvents,
+                dateClick: (info) => openNewAppointmentModal(info.dateStr),
+                eventClick: (info) => {
+                    console.log('Event clicked:', info.event.id);
+                }
+            });
+            calendar.render();
+        }
+
+        // Fetch calendar events
+        async function fetchCalendarEvents(info, successCallback, failureCallback) {
+            try {
+                const res = await fetch(`${API_BASE}/appointments`);
+                const data = await res.json();
+                
+                // Ensure data is an array
+                const appointments = Array.isArray(data) ? data : [];
+                
+                console.log('Loaded appointments:', appointments);
+                
+                const events = appointments.map(apt => {
+                    const doctorColor = getColorForDoctor(apt.doctorId);
+                    return {
+                        id: apt.id,
+                        title: `${apt.patientName || 'Unknown'} - ${apt.service || 'Appointment'}`,
+                        start: `${apt.date}T${apt.time}`,
+                        backgroundColor: doctorColor,
+                        borderColor: doctorColor,
+                        extendedProps: {
+                            doctorName: apt.doctorName || 'Unassigned',
+                            patientContact: apt.contact,
+                            notes: apt.notes
+                        }
+                    };
+                });
+                
+                successCallback(events);
+            } catch (err) {
+                console.error('Fetch events error', err);
+                // Return empty events array instead of failing
+                successCallback([]);
+            }
+        }
+
+        // Get color for doctor
+        function getColorForDoctor(doctorId) {
+            const colors = ['#0066cc', '#00a86b', '#ff6b6b', '#ffa500', '#9b59b6'];
+            return colors[doctorId % colors.length];
+        }
+
+        // Open appointment modal for new appointment
+        function openNewAppointmentModal(dateStr) {
+            document.getElementById('appointmentId').value = '';
+            document.getElementById('appointmentForm').reset();
+            document.getElementById('appointmentDate').value = dateStr;
+            document.getElementById('appointmentPatientName').focus();
+            
+            new bootstrap.Modal(document.getElementById('appointmentModal')).show();
+        }
+
+        // Check conflict
+        async function checkConflict() {
+            const doctorId = document.getElementById('appointmentDoctor').value;
+            const date = document.getElementById('appointmentDate').value;
+            const time = document.getElementById('appointmentTime').value;
+            
+            if (!doctorId || !date || !time) {
+                document.getElementById('conflictWarning').style.display = 'none';
+                return;
+            }
+            
+            try {
+                const appointments = await fetch(`${API_BASE}/appointments?doctorId=${doctorId}&date=${date}`).then(r => r.json());
+                const hasConflict = appointments.some(apt => apt.time === time && apt.status !== 'cancelled');
+                
+                if (hasConflict) {
+                    document.getElementById('conflictWarning').style.display = 'block';
+                } else {
+                    document.getElementById('conflictWarning').style.display = 'none';
+                }
+            } catch (err) {
+                console.error('Conflict check error', err);
+            }
+        }
+
+        // Load appointments
+        async function loadAppointments() {
+            try {
+                const doctorId = document.getElementById('filterDoctor').value;
+                const url = doctorId ? `${API_BASE}/appointments?doctorId=${doctorId}` : `${API_BASE}/appointments`;
+                
+                const res = await fetch(url);
+                const data = await res.json();
+                
+                // Ensure data is an array
+                allAppointments = Array.isArray(data) ? data : [];
+                
+                console.log('Loaded appointments:', allAppointments);
+                
+                const list = document.getElementById('appointmentsList');
+                if (!Array.isArray(allAppointments) || allAppointments.length === 0) {
+                    list.innerHTML = '<p class="text-muted">No appointments.</p>';
+                    return;
+                }
+                
+                list.innerHTML = allAppointments.map(apt => `
+                    <div class="event-item">
+                        <div class="fw-bold">${apt.patientName || 'Unknown'}</div>
+                        <div class="small text-muted">
+                            📅 ${apt.date} at ${apt.time} • 👨‍⚕️ ${apt.doctorName || 'Unassigned'}
+                        </div>
+                        <div class="small text-muted">
+                            💼 ${apt.service || 'Service'} (₹${apt.servicePrice || '0'})
+                        </div>
+                        ${apt.notes ? `<div class="small text-muted mt-1">📝 ${apt.notes}</div>` : ''}
+                        <div class="mt-2">
+                            <button class="btn btn-sm btn-outline-secondary" onclick="editAppointment(${apt.id})">Edit</button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="deleteAppointment(${apt.id})">Delete</button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (err) {
+                console.error('Load appointments error', err);
+                allAppointments = [];
+            }
+        }
+
+        // Edit appointment
+        function editAppointment(id) {
+            const apt = allAppointments.find(a => a.id === id);
+            if (!apt) return;
+            
+            document.getElementById('appointmentId').value = id;
+            document.getElementById('appointmentPatientName').value = apt.patientName || '';
+            document.getElementById('appointmentContact').value = apt.patientContact || '';
+            document.getElementById('appointmentDoctor').value = apt.doctorId || '';
+            document.getElementById('appointmentService').value = apt.service || '';
+            document.getElementById('appointmentPrice').value = apt.servicePrice || '';
+            document.getElementById('appointmentDate').value = apt.date;
+            document.getElementById('appointmentTime').value = apt.time;
+            document.getElementById('appointmentNotes').value = apt.notes || '';
+            
+            new bootstrap.Modal(document.getElementById('appointmentModal')).show();
+        }
+
+        // Delete appointment
+        async function deleteAppointment(id) {
+            if (!confirm('Delete this appointment?')) return;
+            
+            try {
+                const res = await fetch(`${API_BASE}/appointments/${id}`, { method: 'DELETE' });
+                if (res.ok) {
+                    loadAppointments();
+                    if (calendar) calendar.refetchEvents();
+                } else {
+                    alert('Failed to delete appointment');
+                }
+            } catch (err) {
+                console.error('Delete error', err);
+            }
+        }
+
+        // Save appointment form
+        async function saveAppointmentForm(e) {
+            e.preventDefault();
+            
+            const id = document.getElementById('appointmentId').value;
+            const patientName = document.getElementById('appointmentPatientName').value.trim();
+            const contact = document.getElementById('appointmentContact').value.trim();
+            const doctorId = document.getElementById('appointmentDoctor').value;
+            const service = document.getElementById('appointmentService').value.trim();
+            const servicePrice = parseFloat(document.getElementById('appointmentPrice').value) || 0;
+            const date = document.getElementById('appointmentDate').value;
+            const time = document.getElementById('appointmentTime').value;
+            const notes = document.getElementById('appointmentNotes').value.trim();
+            
+            if (!patientName || !contact || !service || !date || !time) {
+                alert('Please fill all required fields');
+                return;
+            }
+            
+            if (!doctorId) {
+                alert('Please select a doctor');
+                return;
+            }
+            
+            try {
+                const method = id ? 'PUT' : 'POST';
+                const url = id ? `${API_BASE}/appointments/${id}` : `${API_BASE}/appointments`;
+                
+                const res = await fetch(url, {
+                    method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        patientId: null, // Will be created if needed
+                        doctorId: parseInt(doctorId),
+                        name: patientName,
+                        contact,
+                        service,
+                        servicePrice,
+                        date,
+                        time,
+                        notes,
+                        status: 'confirmed'
+                    })
+                });
+                
+                if (res.ok) {
+                    loadAppointments();
+                    if (calendar) calendar.refetchEvents();
+                    document.getElementById('appointmentForm').reset();
+                    document.getElementById('appointmentId').value = '';
+                    bootstrap.Modal.getInstance(document.getElementById('appointmentModal')).hide();
+                } else {
+                    const error = await res.json();
+                    alert(`Failed to save appointment: ${error.error}`);
+                }
+            } catch (err) {
+                console.error('Save error', err);
+                alert('Error saving appointment');
+            }
+        }
+
+        // Load doctor patient history
+        async function loadDoctorHistory() {
+            const doctorId = document.getElementById('selectDoctorForHistory').value;
+            if (!doctorId) {
+                document.getElementById('historyList').innerHTML = '';
+                return;
+            }
+            
+            try {
+                const res = await fetch(`${API_BASE}/doctors/${doctorId}/history`);
+                const data = await res.json();
+                
+                // Ensure data is an array
+                const history = Array.isArray(data) ? data : [];
+                
+                const list = document.getElementById('historyList');
+                if (!Array.isArray(history) || history.length === 0) {
+                    list.innerHTML = '<p class="text-muted">No patient history for this doctor.</p>';
+                    return;
+                }
+                
+                // Group by patient
+                const byPatient = {};
+                history.forEach(h => {
+                    if (!byPatient[h.patientId]) {
+                        byPatient[h.patientId] = [];
+                    }
+                    byPatient[h.patientId].push(h);
+                });
+                
+                list.innerHTML = Object.entries(byPatient).map(([patId, records]) => `
+                    <div class="history-item">
+                        <div class="history-date">👤 ${records[0].patientName}</div>
+                        <div class="small text-muted mb-2">
+                            📞 ${records[0].patientContact || 'N/A'}
+                        </div>
+                        <div class="text-muted">
+                            <strong>Visits: ${records.length}</strong>
+                            <ul class="mt-2 mb-0">
+                                ${records.map(r => `
+                                    <li>
+                                        <small>${r.date} - ${r.service || 'Service'} ${r.treatmentType ? '(' + r.treatmentType + ')' : ''}</small>
+                                        ${r.treatmentNotes ? `<br><small class="text-muted">📝 ${r.treatmentNotes}</small>` : ''}
+                                    </li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (err) {
+                console.error('Load history error', err);
+                alert('Failed to load history');
+            }
+        }
+    </script>
+</body>
+</html>

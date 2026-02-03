@@ -68,19 +68,23 @@
     
     // Appointment data
     const services = [
-      {id: 'cleaning', name: 'Teeth Cleaning', price: 2000, duration: '30 min'},
-      {id: 'root-canal', name: 'Root Canal Treatment', price: 5000, duration: '60 min'},
-      {id: 'whitening', name: 'Teeth Whitening', price: 3500, duration: '45 min'},
-      {id: 'fillings', name: 'Cavity Fillings', price: 2500, duration: '40 min'},
-      {id: 'extraction', name: 'Tooth Extraction', price: 1500, duration: '20 min'},
-      {id: 'orthodontics', name: 'Orthodontics Consultation', price: 1000, duration: '30 min'}
+      {id: 'cleaning', name: 'Specialty Consultation', price: 500, duration: '15 min'},
+      {id: 'root-canal', name: 'Root Canal Treatment', price: 4000, duration: '60 min'},
+      {id: 'whitening', name: 'Flap Surgery', price: 5000, duration: '30 min'},
+      {id: 'fillings', name: 'Metal Crown', price: 3000, duration: '120 min'},
+      {id: 'extraction', name: 'Tooth Extraction', price: 1000, duration: '30 min'},
+      {id: 'orthodontics', name: 'Fixed Ortho', price: 20000, duration: '30 min'}
     ];
     
     const doctors = [
       {id: 'dr-anoop', name: 'Dr. Anoop'},
-      {id: 'dr-seema', name: 'Dr. Seema'},
-      {id: 'dr-rahul', name: 'Dr. Rahul'},
-      {id: 'dr-priya', name: 'Dr. Priya'}
+      {id: 'dr-terry', name: 'Dr. Terry Thomas Edathotty'},
+      {id: 'dr-krishna', name: 'Dr. KrishnaKumar'},
+      {id: 'dr-justin', name: 'Dr. Justin Mathew'},
+      {id: 'dr-renjith', name: 'Dr. Renjith Raj'},
+      {id: 'dr-joseph', name: 'Dr. Joseph J Pulikkottil'},
+      {id: 'dr-sijo', name: 'Dr. Sijo P Mathew'},
+      {id: 'dr-shibu', name: 'Dr. Shibu Sreedhar'}
     ];
     
     const timeSlots = ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'];
@@ -281,7 +285,7 @@
             if(feedback){ feedback.classList.remove('text-muted'); feedback.classList.add('text-success'); feedback.textContent = "Thanks — you're subscribed."; }
         }finally{
             if(btn) btn.disabled = false;
-            setTimeout(()=>{ if(feedback) feedback.classList.add('d-none') },3000);
+            setTimeout(()=>{ if(feedback) feedback.classList.add('d-none') },49152);
         }
         });
     }
@@ -290,4 +294,91 @@
     attachNewsletter('newsletterFormServices','newsletterEmailServices','newsletterBtnServices','newsletterFeedbackServices');
     attachNewsletter('newsletterFormApp','newsletterEmailApp','newsletterBtnApp','newsletterFeedbackApp');
     attachNewsletter('newsletterFormFooter','newsletterEmailFooter','newsletterBtnFooter','newsletterFeedbackFooter');
+
+    // Team Modal Functionality
+    const teamCards = document.querySelectorAll('.team-card');
+    const teamModal = new bootstrap.Modal(document.getElementById('teamModal'));
+
+    // Team member data
+    const teamData = {
+        'Dr. Anoopkumar R': {
+            specialty: 'BDS-Chief Dental',
+            regNo: 'Reg No: 1732',
+            bio: `
+              Dr. Anoopkumar Ravindranath is a trusted and experienced dentist with over three decades of clinical practice, caring for patients since 1994.
+              
+              He completed his dental graduation from CODS, KMC, Mangalore.
+
+              Well-versed in all types of dental treatments, Dr. Anoop believes that the best care begins with clear communication and ethical practice. He takes time to explain dental problems and treatment options, ensuring patients feel comfortable and confident.
+
+              He has served the Indian Dental Association in various official roles for over 15 years, reflecting his commitment to the profession and ethical dentistry.
+
+              “We don’t just treat teeth—we create smiles that shine.”
+              This philosophy guides Dr. Anoop’s approach to care, focusing on long-term oral health, trust, and patient satisfaction.
+            `
+        },
+        'Dr. Terry Thomas Edathotty': {
+            specialty: 'MDS-Orthodontist',
+            regNo: 'Reg No: 4807',
+            bio: 'Dr. Terry Thomas Edathotty is our specialist orthodontist with advanced training in orthodontics. He provides expert treatment for malocclusion, jaw alignment issues, and aesthetic dental corrections using modern orthodontic techniques and appliances.'
+        },
+        'Dr.krishnaKumar': {
+            specialty: 'MDS-Paedodontist',
+            regNo: 'Reg No: 7729',
+            bio: 'Dr. KrishnaKumar specializes in pediatric dentistry, providing gentle and comprehensive dental care for children. His expertise includes preventive care, early intervention treatments, and creating positive dental experiences for young patients.'
+        },
+        'Dr.Renjith Raj': {
+            specialty: 'MDS-Endodontist',
+            regNo: 'Reg No: 8171',
+            bio: 'Dr. Renjith Raj is our endodontic specialist, focusing on root canal treatments and procedures related to the dental pulp. He uses advanced techniques and technology to provide comfortable and effective endodontic care.'
+        },
+        'Dr.Jistin Mathew': {
+            specialty: 'MDS-Oral & Maxillio Facial Surgeon',
+            regNo: 'Reg No: 5492',
+            bio: 'Dr. Jistin Mathew is our oral and maxillofacial surgeon, specializing in surgical procedures of the mouth, jaws, and face. He provides expert care for complex dental surgeries, implants, and facial trauma treatments.'
+        },
+        'Dr.Joseph J Pulikkottil': {
+            specialty: 'MDS-Periodontist & Implantologist',
+            regNo: 'Reg No: 2418',
+            bio: 'Dr. Joseph J Pulikkottil is our periodontist and implantologist, specializing in gum health and dental implants. He provides comprehensive treatment for periodontal diseases and expert implant placement for tooth replacement.'
+        },
+        'Dr.Sijo P Mathew': {
+            specialty: 'MDS-Conservative and Endodontist',
+            regNo: 'Reg No: 8982',
+            bio: `Dr. Sijo P. Mathew is a caring and experienced dentist known for his expertise in painless root canal treatments and cosmetic dental care.
+                  He completed his dental education at Govt. Dental College, Pariyaram, and went on to specialize in Conservative Dentistry & Endodontics.
+                  He works as a Consultant Endodontist at several well-known clinics in Ernakulam and Kottayam, and has previously been associated with leading hospitals and dental centers.
+                  Patients appreciate his calm approach, attention to detail, and focus on preserving natural teeth.
+                  Special Areas of Care:
+                  Single-Visit Root Canal Treatments
+                  Treatment of Severely Damaged Teeth
+                  Cosmetic Dentistry
+                  Minimally Invasive Dental Care
+                  Dr. Sijo is an active member of national and state dental associations and is committed to providing gentle, high-quality treatment with a patient-first approach.`
+    
+        },
+        'Dr.Shibu Sreedhar': {
+            specialty: 'MDS-Endodontist',
+            regNo: 'Reg No: 1561-A',
+            bio: `Dr. Shibu Sreedhar is a skilled endodontist specializing in root canal treatments and dental pulp care. With advanced training and a patient-centered approach, he ensures comfortable and effective endodontic procedures using the latest techniques and technology.`
+        }      
+      };
+
+    teamCards.forEach(card => {
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', function() {
+            const name = this.querySelector('.card-title').textContent.trim();
+            const memberData = teamData[name];
+
+            if (memberData) {
+                document.getElementById('modalImage').src = this.querySelector('img').src;
+                document.getElementById('modalName').textContent = name;
+                document.getElementById('modalSpecialty').textContent = memberData.specialty;
+                document.getElementById('modalRegNo').textContent = memberData.regNo;
+                document.getElementById('modalBio').textContent = memberData.bio;
+
+                teamModal.show();
+            }
+        });
+    });
     });
