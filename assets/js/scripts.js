@@ -172,6 +172,14 @@
     // Date change handler
     const appDate = document.getElementById('appDate');
     if(appDate){
+      // Set minimum date to today (prevent past dates)
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, '0');
+      const day = String(today.getDate()).padStart(2, '0');
+      const minDate = `${year}-${month}-${day}`;
+      appDate.setAttribute('min', minDate);
+      
       appDate.addEventListener('change', function(){
         selectedDate = this.value;
         selectedTime = null;
@@ -308,6 +316,7 @@
             service: selectedService.name,
             servicePrice: selectedService.price,
             doctor: selectedDoctor.name,
+            doctorId: selectedDoctor.id,
             date: selectedDate,
             time: selectedTime,
             notes

@@ -18,6 +18,53 @@ app.use(express.static(path.join(__dirname)));
 
 const PORT = process.env.PORT || 3000;
 
+// Doctor availability map: { doctorId: { dayOfWeek: [availableTimeSlots] } }
+// 0 = Sunday, 1 = Monday, 2 = Tuesday, ... 6 = Saturday
+const doctorAvailability = {
+  'dr-anoop': { 0: [], 1: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'], 2: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'], 3: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30'], 4: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'], 5: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00'], 6: ['09:00', '09:30', '10:00', '10:30', '11:00', '14:00', '14:30', '15:00', '15:30'] },
+  'dr-terry': { 0: [], 1: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30'], 2: ['09:00', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00'], 3: ['09:00', '09:30', '10:00', '10:30', '11:00', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'], 4: ['10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00'], 5: ['09:00', '09:30', '10:00', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30'], 6: [] },
+  'dr-krishna': { 0: [], 1: ['09:00', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'], 2: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30'], 3: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00'], 4: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'], 5: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00'], 6: ['09:00', '09:30', '10:00', '10:30', '11:00', '14:00', '14:30', '15:00', '15:30'] },
+  'dr-justin': { 0: [], 1: ['09:00', '09:30', '10:00', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00'], 2: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '15:00', '15:30', '16:00', '16:30'], 3: ['10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00'], 4: ['09:00', '09:30', '10:00', '10:30', '11:00', '14:00', '14:30', '15:00', '15:30'], 5: ['09:00', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00'], 6: [] },
+  'dr-renjith': { 0: [], 1: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'], 2: ['09:00', '09:30', '10:00', '10:30', '11:00', '14:00', '14:30', '15:00', '15:30', '16:00'], 3: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'], 4: ['09:00', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00'], 5: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00'], 6: ['09:00', '09:30', '10:00', '10:30', '11:00', '14:00', '14:30', '15:00'] },
+  'dr-joseph': { 0: [], 1: ['10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'], 2: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00'], 3: ['09:00', '09:30', '10:00', '10:30', '11:00', '14:00', '14:30', '15:00', '15:30', '16:00'], 4: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'], 5: ['09:00', '10:00', '10:30', '11:00', '14:00', '14:30', '15:00', '15:30'], 6: ['10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30'] },
+  'dr-sijo': { 0: [], 1: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'], 2: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00'], 3: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'], 4: ['09:00', '09:30', '10:00', '10:30', '11:00', '14:00', '14:30', '15:00', '15:30', '16:00'], 5: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00'], 6: ['09:00', '09:30', '10:00', '10:30', '14:00', '14:30', '15:00', '15:30'] },
+  'dr-shibu': { 0: [], 1: ['09:00', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'], 2: ['09:00', '09:30', '10:00', '10:30', '11:00', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'], 3: ['09:00', '09:30', '10:00', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00'], 4: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30'], 5: ['10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00'], 6: [] }
+};
+
+// Function to validate doctor availability
+function isDoctorAvailable(doctorId, dateString, timeSlot) {
+  const date = new Date(dateString + 'T00:00:00');
+  const dayOfWeek = date.getDay();
+  const availableSlots = doctorAvailability[doctorId]?.[dayOfWeek] || [];
+  return availableSlots.includes(timeSlot);
+}
+
+// Mapping between frontend doctor IDs and database doctor names
+const doctorNameMapping = {
+  'dr-anoop': 'Dr. Anoop',
+  'dr-terry': 'Dr. Terry Thomas Edathotty',
+  'dr-krishna': 'Dr. KrishnaKumar',
+  'dr-justin': 'Dr. Justin Mathew',
+  'dr-renjith': 'Dr. Renjith Raj',
+  'dr-joseph': 'Dr. Joseph J Pulikkottil',
+  'dr-sijo': 'Dr. Sijo P Mathew',
+  'dr-shibu': 'Dr. Shibu Sreedhar'
+};
+
+// Reverse mapping for convenience
+const reverseNameMapping = Object.fromEntries(
+  Object.entries(doctorNameMapping).map(([key, value]) => [value, key])
+);
+
+// Function to get doctor ID by frontend doctor key
+async function getDoctorByFrontendId(frontendId) {
+  const doctorName = doctorNameMapping[frontendId];
+  if (!doctorName) return null;
+  
+  const doctorList = await db.getDoctors();
+  return doctorList.find(d => d.name === doctorName) || null;
+}
+
 function createTransport(){
   const host = process.env.SMTP_HOST;
   const port = parseInt(process.env.SMTP_PORT || '587', 10);
@@ -135,6 +182,14 @@ app.post('/api/appointments', async (req, res) => {
   if (!name || !contact) return res.status(400).json({ error: 'Missing name or contact info' });
   if (!service || !date || !time) return res.status(400).json({ error: 'Missing service, date, or time' });
   
+  // Validate doctor availability if doctorId provided
+  if (doctorId) {
+    const doctorIdStr = `dr-${doctorId}`;
+    if (!isDoctorAvailable(doctorIdStr, date, time)) {
+      return res.status(400).json({ error: `Selected doctor is not available on ${date} at ${time}. Please choose another time or doctor.` });
+    }
+  }
+  
   try {
     // Add patient if needed
     let finalPatientId = patientId;
@@ -240,23 +295,45 @@ app.post('/api/contact', async (req,res)=>{
 
 // Legacy endpoint (deprecated, use POST /api/appointments instead)
 app.post('/api/appointment', async (req,res)=>{
-  const {name, contact, service, servicePrice, doctor, date, time, notes} = req.body || {};
+  const {name, contact, service, servicePrice, doctor, doctorId: frontendDoctorId, date, time, notes} = req.body || {};
   if(!name || !contact) return res.status(400).json({error:'Missing name or contact info'});
   
   try {
-    // Find doctor by name if provided
+    // Resolve doctor information
     let doctorId = null;
-    if (doctor) {
-      const doctorList = db.getDoctors();
+    let doctorAvailabilityKey = frontendDoctorId;
+    let displayDoctorName = doctor;
+    
+    if (frontendDoctorId) {
+      // Use frontend doctor ID for availability validation and lookup
+      const foundDoctor = await getDoctorByFrontendId(frontendDoctorId);
+      if (foundDoctor) {
+        doctorId = foundDoctor.id;
+        displayDoctorName = foundDoctor.name;
+      }
+    } else if (doctor) {
+      // Fallback: look up by doctor name
+      const doctorList = await db.getDoctors();
       const foundDoctor = doctorList.find(d => d.name.toLowerCase() === doctor.toLowerCase());
-      if (foundDoctor) doctorId = foundDoctor.id;
+      if (foundDoctor) {
+        doctorId = foundDoctor.id;
+        doctorAvailabilityKey = reverseNameMapping[foundDoctor.name];
+        displayDoctorName = foundDoctor.name;
+      }
+    }
+    
+    // Validate doctor availability
+    if (doctorAvailabilityKey) {
+      if (!isDoctorAvailable(doctorAvailabilityKey, date, time)) {
+        return res.status(400).json({ error: `${displayDoctorName} is not available on ${date} at ${time}. Please select another time or doctor.` });
+      }
     }
     
     // Use new appointment endpoint logic
-    const patientList = db.getPatients();
+    const patientList = await db.getPatients();
     let patientId = patientList.find(p => p.contact === contact)?.id;
     
-    const appointment = db.addAppointment(patientId || null, doctorId, service, servicePrice, date, time, notes);
+    const appointment = await db.addAppointment(patientId || null, doctorId, service, servicePrice, date, time, notes);
     
     const transporter = createTransport();
     if(transporter) {
@@ -265,10 +342,10 @@ app.post('/api/appointment', async (req,res)=>{
         const fromEmail = process.env.FROM_EMAIL || process.env.SMTP_USER;
         
         // Email to clinic
-        const clinicText = `New Appointment Request:\n\nName: ${name}\nContact: ${contact}\nService: ${service} (₹${servicePrice})\nDoctor: ${doctor}\nDate: ${date}\nTime: ${time}\nNotes: ${notes || '(none)'}\nSubmitted: ${new Date().toISOString()}`;
+        const clinicText = `New Appointment Request:\n\nName: ${name}\nContact: ${contact}\nService: ${service} (₹${servicePrice})\nDoctor: ${displayDoctorName}\nDate: ${date}\nTime: ${time}\nNotes: ${notes || '(none)'}\nSubmitted: ${new Date().toISOString()}`;
         
         // Confirmation email to patient
-        const patientText = `Dear ${name},\n\nYour appointment has been confirmed! Here are your details:\n\n📋 Service: ${service}\n💰 Price: ₹${servicePrice}\n👨‍⚕️ Doctor: ${doctor}\n📅 Date: ${date}\n⏰ Time: ${time}\n\nPlease call +91 98765 43210 if you need to reschedule.\n\nThank you for choosing Anupam Dental Clinic!\n\nBest regards,\nAnupam Dental Team`;
+        const patientText = `Dear ${name},\n\nYour appointment has been confirmed! Here are your details:\n\n📋 Service: ${service}\n💰 Price: ₹${servicePrice}\n👨‍⚕️ Doctor: ${displayDoctorName}\n📅 Date: ${date}\n⏰ Time: ${time}\n\nPlease call +91 98765 43210 if you need to reschedule.\n\nThank you for choosing Anupam Dental Clinic!\n\nBest regards,\nAnupam Dental Team`;
         
         // Send to clinic
         await transporter.sendMail({
@@ -326,7 +403,7 @@ app.post('/api/feedback', async (req,res)=>{
   const {name, email, message} = req.body || {};
   if(!name || !email || !message) return res.status(400).json({error:'Missing required fields'});
   const transporter = createTransport();
-  const toEmail = 'scholigencedb@gmail.com';
+  const toEmail = 'govindmyguardian@gmail.com';
   const text = `Developer Feedback:\nName: ${name}\nEmail: ${email}\nMessage: ${message}\nTime: ${new Date().toISOString()}`;
   if(transporter){
     try{
