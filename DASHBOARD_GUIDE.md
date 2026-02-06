@@ -1,4 +1,4 @@
-# Task C Implementation: Staff Dashboard with Calendar, Doctor Management & Patient History
+# Staff Dashboard with Calendar, Doctor Management & Patient History
 
 ## Overview
 This implementation adds a professional **Staff Dashboard** with real-time calendar scheduling, doctor management system, and patient visit history tracking for the Anupam Dental Clinic management system.

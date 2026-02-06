@@ -1,5 +1,4 @@
     document.addEventListener('DOMContentLoaded', function(){
-    // Enhanced client-side behavior: form submission to backend + smooth scroll + AOS init handled in HTML
     const contactForm = document.getElementById('contactForm');
     const contactFeedback = document.getElementById('formFeedback');
     const submitBtn = document.getElementById('submitBtn');
@@ -87,12 +86,38 @@
       {id: 'dr-shibu', name: 'Dr. Shibu Sreedhar'}
     ];
     
+    // Doctor availability: { doctorId: { dayOfWeek: [availableTimeSlots] } }
+    // 0 = Sunday, 1 = Monday, 2 = Tuesday, ... 6 = Saturday
+    const doctorAvailability = {
+      'dr-anoop': { 0: [], 1: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'], 2: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'], 3: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30'], 4: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'], 5: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00'], 6: ['09:00', '09:30', '10:00', '10:30', '11:00', '14:00', '14:30', '15:00', '15:30'] },
+      'dr-terry': { 0: [], 1: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30'], 2: ['09:00', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00'], 3: ['09:00', '09:30', '10:00', '10:30', '11:00', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'], 4: ['10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00'], 5: ['09:00', '09:30', '10:00', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30'], 6: [] },
+      'dr-krishna': { 0: [], 1: ['09:00', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'], 2: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30'], 3: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00'], 4: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'], 5: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00'], 6: ['09:00', '09:30', '10:00', '10:30', '11:00', '14:00', '14:30', '15:00', '15:30'] },
+      'dr-justin': { 0: [], 1: ['09:00', '09:30', '10:00', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00'], 2: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '15:00', '15:30', '16:00', '16:30'], 3: ['10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00'], 4: ['09:00', '09:30', '10:00', '10:30', '11:00', '14:00', '14:30', '15:00', '15:30'], 5: ['09:00', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00'], 6: [] },
+      'dr-renjith': { 0: [], 1: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'], 2: ['09:00', '09:30', '10:00', '10:30', '11:00', '14:00', '14:30', '15:00', '15:30', '16:00'], 3: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'], 4: ['09:00', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00'], 5: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00'], 6: ['09:00', '09:30', '10:00', '10:30', '11:00', '14:00', '14:30', '15:00'] },
+      'dr-joseph': { 0: [], 1: ['10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'], 2: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00'], 3: ['09:00', '09:30', '10:00', '10:30', '11:00', '14:00', '14:30', '15:00', '15:30', '16:00'], 4: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'], 5: ['09:00', '10:00', '10:30', '11:00', '14:00', '14:30', '15:00', '15:30'], 6: ['10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30'] },
+      'dr-sijo': { 0: [], 1: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'], 2: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00'], 3: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'], 4: ['09:00', '09:30', '10:00', '10:30', '11:00', '14:00', '14:30', '15:00', '15:30', '16:00'], 5: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00'], 6: ['09:00', '09:30', '10:00', '10:30', '14:00', '14:30', '15:00', '15:30'] },
+      'dr-shibu': { 0: [], 1: ['09:00', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'], 2: ['09:00', '09:30', '10:00', '10:30', '11:00', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'], 3: ['09:00', '09:30', '10:00', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00'], 4: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30'], 5: ['10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00'], 6: [] }
+    };
+    
     const timeSlots = ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'];
     
     let selectedService = null;
     let selectedDoctor = null;
     let selectedDate = null;
     let selectedTime = null;
+    
+    // Toast notification function
+    function showToast(message, type = 'success') {
+      const toast = document.createElement('div');
+      toast.className = `toast-notification ${type}`;
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.classList.add('fade-out');
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
     
     // Render services
     const servicesList = document.getElementById('servicesList');
@@ -102,9 +127,9 @@
         div.className = 'service-card';
         div.innerHTML = `
           <div class="service-header">
-            <div>
-              <h6 class="mb-1">${svc.name}</h6>
-              <small class="text-muted">${svc.duration}</small>
+            <div class="service-info">
+              <h6 class="mb-0">${svc.name}</h6>
+              <small class="service-duration">${svc.duration}</small>
             </div>
             <div class="service-price">₹${svc.price}</div>
           </div>
@@ -114,6 +139,7 @@
           div.classList.add('selected');
           selectedService = svc;
           updateSummary();
+          showToast(`✓ Service selected: ${svc.name}`, 'success');
         });
         servicesList.appendChild(div);
       });
@@ -132,7 +158,12 @@
           document.querySelectorAll('.doctor-badge').forEach(b => b.classList.remove('selected'));
           badge.classList.add('selected');
           selectedDoctor = doc;
+          selectedTime = null;
+          document.getElementById('appTime').value = '';
+          document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('selected'));
+          renderTimeSlots();
           updateSummary();
+          showToast(`✓ Doctor selected: ${doc.name}`, 'success');
         });
         doctorsList.appendChild(badge);
       });
@@ -143,29 +174,72 @@
     if(appDate){
       appDate.addEventListener('change', function(){
         selectedDate = this.value;
+        selectedTime = null;
+        document.getElementById('appTime').value = '';
+        document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('selected'));
         renderTimeSlots();
         updateSummary();
       });
     }
     
-    // Render time slots
+    // Render time slots based on doctor availability
     function renderTimeSlots(){
         const container = document.getElementById('slotsContainer');
         if(!container) return;
         container.innerHTML = '';
         
+        // Check if date and doctor are selected
+        if(!selectedDate || !selectedDoctor){
+            const msg = document.createElement('p');
+            msg.className = 'text-muted';
+            msg.style.fontSize = '13px';
+            msg.textContent = 'Please select a date and doctor to view available slots.';
+            container.appendChild(msg);
+            return;
+        }
+        
+        // Get day of week from selected date
+        const dateObj = new Date(selectedDate + 'T00:00:00');
+        const dayOfWeek = dateObj.getDay();
+        
+        // Get available slots for the selected doctor on this day
+        const doctorId = selectedDoctor.id;
+        const availableSlots = doctorAvailability[doctorId]?.[dayOfWeek] || [];
+        
+        // Check if doctor is available on this day
+        if(availableSlots.length === 0){
+            const msg = document.createElement('p');
+            msg.className = 'text-danger';
+            msg.style.fontSize = '13px';
+            msg.innerHTML = `<strong>⚠ ${selectedDoctor.name} is not available on ${new Date(selectedDate + 'T00:00:00').toLocaleDateString('en-US', {weekday: 'long'})}</strong><br>Please choose a different date or doctor.`;
+            container.appendChild(msg);
+            return;
+        }
+        
+        // Render available time slots
         timeSlots.forEach(slot => {
             const btn = document.createElement('button');
             btn.type = 'button';
             btn.className = 'slot-btn';
             btn.textContent = slot;
+            
+            const isAvailable = availableSlots.includes(slot);
+            
+            if(!isAvailable){
+                btn.disabled = true;
+                btn.title = 'Not available for selected doctor';
+            }
+            
             btn.addEventListener('click', (e) => {
             e.preventDefault();
-            document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('selected'));
-            btn.classList.add('selected');
-            selectedTime = slot;
-            document.getElementById('appTime').value = slot;
-            updateSummary();
+            if(isAvailable){
+                document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                selectedTime = slot;
+                document.getElementById('appTime').value = slot;
+                updateSummary();
+                showToast(`✓ Time selected: ${slot}`, 'success');
+            }
             });
             container.appendChild(btn);
         });
@@ -205,6 +279,19 @@
           appFeedback.classList.remove('d-none');
           appFeedback.classList.add('text-danger');
           appFeedback.textContent = 'Please complete all appointment details.';
+          return;
+        }
+        
+        // Validate doctor availability for selected date and time
+        const dateObj = new Date(selectedDate + 'T00:00:00');
+        const dayOfWeek = dateObj.getDay();
+        const doctorId = selectedDoctor.id;
+        const availableSlots = doctorAvailability[doctorId]?.[dayOfWeek] || [];
+        
+        if(!availableSlots.includes(selectedTime)){
+          appFeedback.classList.remove('d-none');
+          appFeedback.classList.add('text-danger');
+          appFeedback.textContent = `${selectedDoctor.name} is not available at ${selectedTime} on ${dateObj.toLocaleDateString('en-US', {weekday: 'long'})}. Please select another time or doctor.`;
           return;
         }
         
